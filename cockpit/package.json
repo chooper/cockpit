@@ -1,6 +1,6 @@
 {
   "name": "cockpit",
-  "description": "dotCloud operations dashboard",
+  "description": "A simple, real-time event and metrics dashboard",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
