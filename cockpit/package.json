@@ -1,0 +1,11 @@
+{
+  "name": "cockpit",
+  "description": "dotCloud operations dashboard",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.0.0rc4",
+    "socket.io": "0.9.10",
+    "zerorpc": "0.9.1"
+  }
+}

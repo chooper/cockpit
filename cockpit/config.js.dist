@@ -1,0 +1,11 @@
+
+var ClientList = {
+    'dummy': {
+        'endpoint': 'tcp://localhost:1300',
+        'call_name': 'simple_req_streaming',
+        'args': []
+    },
+};
+
+module.exports.ClientList = ClientList;
+
