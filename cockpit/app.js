@@ -6,10 +6,6 @@
  * Charles Hooper <charles@dotcloud.com>
  */
 
-// config
-// TODO: Move to config/environment
-var HTTP_PORT = 3000;
-
 // imports
 var events = require('events');
 var emitter = new events.EventEmitter;
@@ -90,7 +86,8 @@ app.get('/', function(req, res) {
 });
 
 // Configure and start service
+var http_port = process.env.PORT_COCKPIT || config.server.port;
 app.use('/static', express.static(__dirname + '/hud/assets/static'));
-server.listen(HTTP_PORT);
-console.log('Listening on port', HTTP_PORT);
+server.listen(http_port);
+console.log('Listening on port', http_port);
 init_stream_clients();

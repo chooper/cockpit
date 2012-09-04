@@ -1,4 +1,8 @@
 
+var ServerConfig = {
+    'port': 3000
+};
+
 var ClientList = {
     'dummy': {
         'endpoint': 'tcp://localhost:1300',
@@ -8,5 +12,6 @@ var ClientList = {
 };
 
 module.exports = {
+        'server': ServerConfig,
         'ClientList': ClientList
 };
