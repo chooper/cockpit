@@ -7,5 +7,6 @@ var ClientList = {
     },
 };
 
-module.exports.ClientList = ClientList;
-
+module.exports = {
+        'ClientList': ClientList
+};

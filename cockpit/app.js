@@ -19,7 +19,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var util = require('util');
 var StreamClient = require('./stream_client')(emitter).StreamClient;
-var client_list = require('./config').ClientList;
+var config = require('./config');
 
 emitter.on('error', function (error) {
     console.log('!ERROR!', error);
@@ -31,16 +31,16 @@ emitter.on('error', function (error) {
  */
 function init_stream_clients (callback) {
     console.log('init streamers');
-    for (name in client_list) {
+    for (name in config.ClientList) {
         console.log('init streamer for', name);
 
-        var call_args = ('args' in client_list[name]) ? // } 
-            client_list[name]['args'] : [];             // }
+        var call_args = ('args' in config.ClientList[name]) ? // } 
+            config.ClientList[name]['args'] : [];             // }
 
         var sc = new StreamClient(
             name,
-            client_list[name]['endpoint'],
-            client_list[name]['call_name'],
+            config.ClientList[name]['endpoint'],
+            config.ClientList[name]['call_name'],
             call_args );
         sc.run();
     }
@@ -52,7 +52,7 @@ function init_stream_clients (callback) {
  * Register an event handler for receiving messages on each stream.
  */
 function init_ws_events (socket, callback) {
-    for (event_group in client_list) {
+    for (event_group in config.ClientList) {
         var event_name = event_group + '_recv';
         console.log('init eventListener', event_name);
 
