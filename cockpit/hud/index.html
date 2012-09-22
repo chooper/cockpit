@@ -26,20 +26,24 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="/static/js/smoothie.js"></script>
         <script>
-          var DRAW_DELAY = 3000; // how long for smoothie to delay updates (ms)
-          var socket = null;
-          var smoothie = new SmoothieChart();
+          var draw_delay = 3000; // how long for smoothie to delay updates (ms)
+          var chart_options = {
+            'millisPerPixel': 100,
+            'grid': { 'millisPerLine': 5000 }
+          };
+          var smoothie = new SmoothieChart(chart_options);
           var TSLogLines = new TimeSeries();
           smoothie.addTimeSeries(TSLogLines);
 
+          var socket = null;
+
           document.addEventListener('DOMContentLoaded',function() {
-            smoothie.streamTo(document.getElementById("hud_chart"), DRAW_DELAY);
+            smoothie.streamTo(document.getElementById("hud_chart"), draw_delay);
 
             socket = io.connect('http://' + document.location.host);
 
             socket.on('sawmill_logs_recv', function (stats_obj) {
               console.log('event: sawmill_logs_recv');
-              console.log(stats_obj);
               var e = document.getElementById('loglines_metric');
               var lograte = stats_obj['#logs/s'];
               var ts = new Date().getTime();
@@ -52,7 +56,6 @@
               }
             });
           });
-
           </script>
     </head>
     <body>
@@ -65,16 +68,11 @@
         </div>
 
         <div class="container">
-<!--
-            <div class="page-header">
-              <h1>dotCloud Operations Dashboard</h2>
-            </div>
--->
             <!-- CONTENT START -->
             <div class="row">
-              <div class="span8 offset2 well">
+              <div class="span12 well" style="text-align: center;">
                 <h2><span id="loglines_metric">9999.99</span> lines/s</h2>
-                <div><canvas id="hud_chart" height="300" width="800" style="width:100%;"></canvas></div>
+                <div><canvas id="hud_chart" height="300" width="940" style="margin-left: auto; margin-right: auto"></canvas></div>
                 <div id="timeline"></div>
               </div>
             </div>
