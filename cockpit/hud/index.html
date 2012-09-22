@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Cockpit - HUD</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Cockpit - HUD">
+        <meta name="author" content="Charles Hooper <charles.hooper@dotcloud.com>">
+
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+        <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/font-awesome.css">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/static/js/smoothie.js"></script>
+        <script>
+          var DRAW_DELAY = 3000; // how long for smoothie to delay updates (ms)
+          var socket = null;
+          var smoothie = new SmoothieChart();
+          var TSLogLines = new TimeSeries();
+          smoothie.addTimeSeries(TSLogLines);
+
+          document.addEventListener('DOMContentLoaded',function() {
+            smoothie.streamTo(document.getElementById("hud_chart"), DRAW_DELAY);
+
+            socket = io.connect('http://' + document.location.host);
+
+            socket.on('sawmill_logs_recv', function (stats_obj) {
+              console.log('event: sawmill_logs_recv');
+              console.log(stats_obj);
+              var e = document.getElementById('loglines_metric');
+              var lograte = stats_obj['#logs/s'];
+              var ts = new Date().getTime();
+
+              if (lograte) {
+                if (e)
+                  e.innerHTML = lograte.toFixed(3).toString();
+
+                TSLogLines.append(ts, lograte);
+              }
+            });
+          });
+
+          </script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="/">Cockpit - dotCloud Operations Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+<!--
+            <div class="page-header">
+              <h1>dotCloud Operations Dashboard</h2>
+            </div>
+-->
+            <!-- CONTENT START -->
+            <div class="row">
+              <div class="span8 offset2 well">
+                <h2><span id="loglines_metric">9999.99</span> lines/s</h2>
+                <div><canvas id="hud_chart" height="300" width="800" style="width:100%;"></canvas></div>
+                <div id="timeline"></div>
+              </div>
+            </div>
+            <!-- CONTENT STOP -->
+        </div>
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="../assets/js/jquery.js"></script>
+        <script src="../assets/js/bootstrap-transition.js"></script>
+        <script src="../assets/js/bootstrap-alert.js"></script>
+        <script src="../assets/js/bootstrap-modal.js"></script>
+        <script src="../assets/js/bootstrap-dropdown.js"></script>
+        <script src="../assets/js/bootstrap-scrollspy.js"></script>
+        <script src="../assets/js/bootstrap-tab.js"></script>
+        <script src="../assets/js/bootstrap-tooltip.js"></script>
+        <script src="../assets/js/bootstrap-popover.js"></script>
+        <script src="../assets/js/bootstrap-button.js"></script>
+        <script src="../assets/js/bootstrap-collapse.js"></script>
+        <script src="../assets/js/bootstrap-carousel.js"></script>
+        <script src="../assets/js/bootstrap-typeahead.js"></script>
+
+    </body>
+</html>
